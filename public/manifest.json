@@ -4,16 +4,16 @@
   "description": "Gestión mobile-first de inspecciones vehiculares, tickets de falla y mantenimiento preventivo.",
   "icons": [
     {
-      "src": "pwa-192.png",
-      "type": "image/png",
+      "src": "pwa-192.svg",
+      "type": "image/svg+xml",
       "sizes": "192x192",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "pwa-512.png",
-      "type": "image/png",
+      "src": "pwa-512.svg",
+      "type": "image/svg+xml",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ],
   "start_url": "/",

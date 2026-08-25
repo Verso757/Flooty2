@@ -195,14 +195,46 @@ export interface Vehicle {
   assignedOperatorName?: string;
   blockedReason?: string;
   criticalTicketId?: string;
+  blockedAt?: string;
   odometerKm?: number;
   qrCodeValue?: string; // e.g. "FLOTACHECK:UNIT:v-507"
 }
 
+export type OfflineQueueType =
+  | 'INSPECTION_SUBMIT'
+  | 'TICKET_UPDATE'
+  | 'TICKET_RECONFIRM'
+  | 'ROUTE_ASSIGNMENT';
+
+export type OfflineQueuePayload =
+  | {
+      inspection: InspectionRecord;
+      newTickets: Ticket[];
+      unitId: string;
+      hasCriticalGenerated: boolean;
+      mainCriticalTicketId: string;
+    }
+  | {
+      ticketId: string;
+      status: TicketStatus;
+      notes?: string;
+    }
+  | {
+      ticketId: string;
+      stillPresent: boolean;
+      photo?: string;
+      note?: string;
+    }
+  | {
+      routeId: string;
+      vehicleId: string;
+      reason?: string;
+    };
+
 export interface OfflineQueueItem {
   id: string;
-  type: 'INSPECTION_SUBMIT' | 'TICKET_UPDATE' | 'TICKET_RECONFIRM' | 'ROUTE_ASSIGNMENT';
+  type: OfflineQueueType;
   timestamp: string;
-  payload: any;
+  payload: OfflineQueuePayload;
 }
 

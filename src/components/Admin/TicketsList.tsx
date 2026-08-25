@@ -42,6 +42,7 @@ export const TicketsList: React.FC = () => {
     assignTicket,
     saveTicket,
     deleteTicket,
+    getNextTicketFolio,
     users,
     vehicles,
     routes
@@ -300,8 +301,7 @@ export const TicketsList: React.FC = () => {
     if (!unit || !newTitle.trim()) return;
 
     const assignedRoute = routes.find((r) => r.id === unit.currentRouteId || r.assignedVehicleId === unit.id);
-    const folioNum = Math.floor(1000 + Math.random() * 9000);
-    const newFolio = `TK-${folioNum}`;
+    const newFolio = getNextTicketFolio();
 
     const newTicketObj: Ticket = {
       id: newFolio,

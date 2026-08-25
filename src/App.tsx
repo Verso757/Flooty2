@@ -31,7 +31,7 @@ import {
 
 const MainAppContent: React.FC = () => {
   const { currentUser, vehicles, tickets, templates } = useApp();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('dashboard');
 
   const isOperator = currentUser.role === 'operador';

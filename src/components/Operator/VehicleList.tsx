@@ -216,11 +216,12 @@ export const VehicleList: React.FC = () => {
 
     const reconfirmedIds = activeOpenTickets.map((t) => t.id);
 
-    const matchingTemplate = chosenTemplateId
-      ? templates.find((t) => t.id === chosenTemplateId)
-      : templates.find((t) => t.targetVehicleType === selectedVehicle.type) ||
-        templates.find((t) => t.isDefault) ||
-        template;
+    const matchingTemplate =
+      (chosenTemplateId
+        ? templates.find((t) => t.id === chosenTemplateId)
+        : templates.find((t) => t.targetVehicleType === selectedVehicle.type)) ||
+      templates.find((t) => t.isDefault) ||
+      template;
 
     const result = submitInspection(
       selectedVehicle.id,
@@ -277,11 +278,12 @@ export const VehicleList: React.FC = () => {
   }
 
   if (flowStep === 'CHECKLIST' && selectedVehicle) {
-    const activeInspectionTemplate = chosenTemplateId
-      ? templates.find((t) => t.id === chosenTemplateId)
-      : templates.find((t) => t.targetVehicleType === selectedVehicle.type) ||
-        templates.find((t) => t.isDefault) ||
-        template;
+    const activeInspectionTemplate =
+      (chosenTemplateId
+        ? templates.find((t) => t.id === chosenTemplateId)
+        : templates.find((t) => t.targetVehicleType === selectedVehicle.type)) ||
+      templates.find((t) => t.isDefault) ||
+      template;
 
     return (
       <ChecklistWizard
@@ -476,7 +478,7 @@ export const VehicleList: React.FC = () => {
       {/* SWAP TRUCK MODAL (Cambio de Camión a Ruta por descompostura o inservible) */}
       {isSwapModalOpen && targetSwapRoute && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 max-w-md w-full shadow-2xl space-y-4">
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 max-w-md w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center">

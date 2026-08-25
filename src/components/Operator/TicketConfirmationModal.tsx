@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Vehicle, Ticket } from '../../types';
 import { useApp } from '../../context/AppContext';
 import { AlertTriangle, CheckCircle, XCircle, Camera, ArrowLeft, Send } from 'lucide-react';
@@ -23,6 +23,12 @@ export const TicketConfirmationModal: React.FC<Props> = ({
   const [answeredCount, setAnsweredCount] = useState(0);
 
   const currentTicket = openTickets[currentIndex];
+
+  useEffect(() => {
+    if (openTickets.length === 0) {
+      onComplete();
+    }
+  }, [openTickets.length, onComplete]);
 
   const handleResponse = (stillPresent: boolean) => {
     if (!currentTicket) return;
@@ -58,7 +64,6 @@ export const TicketConfirmationModal: React.FC<Props> = ({
   };
 
   if (!currentTicket) {
-    onComplete();
     return null;
   }
 

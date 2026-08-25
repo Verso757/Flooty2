@@ -1,10 +1,10 @@
-const CACHE_NAME = 'flotacheck-v1';
+const CACHE_NAME = 'flotacheck-v2';
 const ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/src/main.tsx',
-  '/src/index.css'
+  '/pwa-192.svg',
+  '/pwa-512.svg'
 ];
 
 self.addEventListener('install', (e) => {
@@ -32,22 +32,28 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  if (e.request.method !== 'GET') return;
+  const { request } = e;
+  if (request.method !== 'GET') return;
+
+  // Only handle same-origin requests (skip CDNs, analytics, etc.)
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
+
   e.respondWith(
-    fetch(e.request)
+    fetch(request)
       .then((response) => {
-        if (response && response.status === 200) {
+        if (response && response.status === 200 && response.type === 'basic') {
           const responseClone = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(e.request, responseClone);
+            cache.put(request, responseClone);
           });
         }
         return response;
       })
       .catch(() => {
-        return caches.match(e.request).then((res) => {
+        return caches.match(request).then((res) => {
           if (res) return res;
-          if (e.request.headers.get('accept')?.includes('text/html')) {
+          if (request.headers.get('accept')?.includes('text/html')) {
             return caches.match('/index.html');
           }
         });

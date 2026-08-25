@@ -133,48 +133,60 @@ interface AppContextType {
   getCriticalUnresolvedTicketForUnit: (unitId: string) => Ticket | undefined;
   getVehicleForRoute: (routeId: string) => Vehicle | undefined;
   getRouteForVehicle: (vehicleId: string) => Route | undefined;
+  getNextTicketFolio: () => string;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const LOCAL_STORAGE_KEY = 'flotacheck_state_v3';
 
-export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [users, setUsers] = useState<User[]>(() => {
-    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_users`);
-    return saved ? JSON.parse(saved) : initialUsers;
+const loadStored = <T,>(key: string, fallback: T): T => {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+const computeNextTicketBase = (tickets: Ticket[]): number => {
+  let max = 0;
+  tickets.forEach((t) => {
+    const match = t.id.match(/^TK-(\d+)$/);
+    if (match) {
+      max = Math.max(max, parseInt(match[1], 10));
+    }
   });
+  return max + 1;
+};
+
+export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [users, setUsers] = useState<User[]>(() =>
+    loadStored<User[]>(`${LOCAL_STORAGE_KEY}_users`, initialUsers)
+  );
+
   const [currentUser, setCurrentUser] = useState<User>(() => {
+    const saved = loadStored<User | null>(`${LOCAL_STORAGE_KEY}_currentUser`, null);
+    if (saved) return saved;
     return users[0] || initialUsers[0];
   });
 
   // Persistent States
-  const [vehicles, setVehicles] = useState<Vehicle[]>(() => {
-    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_vehicles`);
-    return saved ? JSON.parse(saved) : initialVehicles;
-  });
+  const [vehicles, setVehicles] = useState<Vehicle[]>(() =>
+    loadStored<Vehicle[]>(`${LOCAL_STORAGE_KEY}_vehicles`, initialVehicles)
+  );
 
-  const [routes, setRoutes] = useState<Route[]>(() => {
-    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_routes`);
-    return saved ? JSON.parse(saved) : initialRoutes;
-  });
+  const [routes, setRoutes] = useState<Route[]>(() =>
+    loadStored<Route[]>(`${LOCAL_STORAGE_KEY}_routes`, initialRoutes)
+  );
 
-  const [tickets, setTickets] = useState<Ticket[]>(() => {
-    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_tickets`);
-    return saved ? JSON.parse(saved) : initialTickets;
-  });
+  const [tickets, setTickets] = useState<Ticket[]>(() =>
+    loadStored<Ticket[]>(`${LOCAL_STORAGE_KEY}_tickets`, initialTickets)
+  );
 
-  const [templates, setTemplates] = useState<ChecklistTemplate[]>(() => {
-    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_templates`);
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        return initialTemplates;
-      }
-    }
-    return initialTemplates;
-  });
+  const [templates, setTemplates] = useState<ChecklistTemplate[]>(() =>
+    loadStored<ChecklistTemplate[]>(`${LOCAL_STORAGE_KEY}_templates`, initialTemplates)
+  );
 
   const [activeTemplateId, setActiveTemplateId] = useState<string>(() => {
     const defaultTpl = templates.find((t) => t.isDefault) || templates[0] || initialChecklistTemplate;
@@ -184,25 +196,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Keep `template` pointing to active or default template
   const template = templates.find((t) => t.id === activeTemplateId) || templates[0] || initialChecklistTemplate;
 
-  const [inspections, setInspections] = useState<InspectionRecord[]>(() => {
-    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_inspections`);
-    return saved ? JSON.parse(saved) : initialInspectionHistory;
-  });
+  const [inspections, setInspections] = useState<InspectionRecord[]>(() =>
+    loadStored<InspectionRecord[]>(`${LOCAL_STORAGE_KEY}_inspections`, initialInspectionHistory)
+  );
 
-  const [preventivePlans, setPreventivePlans] = useState<PreventivePlan[]>(() => {
-    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_preventive`);
-    return saved ? JSON.parse(saved) : initialPreventivePlans;
-  });
+  const [preventivePlans, setPreventivePlans] = useState<PreventivePlan[]>(() =>
+    loadStored<PreventivePlan[]>(`${LOCAL_STORAGE_KEY}_preventive`, initialPreventivePlans)
+  );
 
-  const [documents, setDocuments] = useState<FleetDocument[]>(() => {
-    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_documents`);
-    return saved ? JSON.parse(saved) : initialDocuments;
-  });
+  const [documents, setDocuments] = useState<FleetDocument[]>(() =>
+    loadStored<FleetDocument[]>(`${LOCAL_STORAGE_KEY}_documents`, initialDocuments)
+  );
 
-  const [offlineQueue, setOfflineQueue] = useState<OfflineQueueItem[]>(() => {
-    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY}_offlineQueue`);
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [offlineQueue, setOfflineQueue] = useState<OfflineQueueItem[]>(() =>
+    loadStored<OfflineQueueItem[]>(`${LOCAL_STORAGE_KEY}_offlineQueue`, [])
+  );
 
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
 
@@ -228,6 +236,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     localStorage.setItem(`${LOCAL_STORAGE_KEY}_users`, JSON.stringify(users));
   }, [users]);
+
+  useEffect(() => {
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_currentUser`, JSON.stringify(currentUser));
+  }, [currentUser]);
 
   useEffect(() => {
     localStorage.setItem(`${LOCAL_STORAGE_KEY}_vehicles`, JSON.stringify(vehicles));
@@ -292,6 +304,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         t.severity === 'critica' &&
         (t.status === 'pendiente' || t.status === 'en_progreso')
     );
+  };
+
+  const getNextTicketFolio = (): string => {
+    return `TK-${String(computeNextTicketBase(tickets)).padStart(4, '0')}`;
   };
 
   const assignVehicleToRoute = (routeId: string, vehicleId: string, reason?: string) => {
@@ -365,40 +381,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const updateTicketStatus = (ticketId: string, status: TicketStatus, notes?: string) => {
-    setTickets((prev) =>
-      prev.map((t) => {
-        if (t.id === ticketId) {
-          const updated = {
-            ...t,
-            status,
-            resolutionNotes: notes ? notes : t.resolutionNotes,
-            updatedAt: new Date().toISOString()
-          };
-          
-          // If a critical ticket is marked resolved, automatically check if unit can be unblocked
-          if (t.severity === 'critica' && (status === 'resuelto' || status === 'cancelado')) {
-            setTimeout(() => {
-              setVehicles((vPrev) =>
-                vPrev.map((v) => {
-                  if (v.id === t.unitId && v.criticalTicketId === t.id) {
-                    return {
-                      ...v,
-                      status: 'activa',
-                      blockedReason: undefined,
-                      criticalTicketId: undefined
-                    };
-                  }
-                  return v;
-                })
-              );
-            }, 0);
-          }
+    const target = tickets.find((t) => t.id === ticketId);
 
-          return updated;
-        }
-        return t;
-      })
+    setTickets((prev) =>
+      prev.map((t) =>
+        t.id === ticketId
+          ? {
+              ...t,
+              status,
+              resolutionNotes: notes ? notes : t.resolutionNotes,
+              updatedAt: new Date().toISOString()
+            }
+          : t
+      )
     );
+
+    // If a critical ticket is marked resolved/cancelled, automatically unblock its unit.
+    if (target && target.severity === 'critica' && (status === 'resuelto' || status === 'cancelado')) {
+      setVehicles((prev) =>
+        prev.map((v) =>
+          v.id === target.unitId && v.criticalTicketId === target.id
+            ? { ...v, status: 'activa', blockedReason: undefined, criticalTicketId: undefined, blockedAt: undefined }
+            : v
+        )
+      );
+    }
   };
 
   const updateTicketCostsAndParts = (
@@ -542,21 +549,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const createdTickets: Ticket[] = [];
     const generatedTicketFolios: string[] = [];
 
-    // Calculate next Ticket Folio number
-    let nextFolioNum = 2503;
-    tickets.forEach((t) => {
-      const match = t.id.match(/^TK-(\d+)$/);
-      if (match) {
-        const num = parseInt(match[1], 10);
-        if (num >= nextFolioNum) nextFolioNum = num + 1;
-      }
-    });
+    // Calculate next Ticket Folio number from existing folios
+    const nextFolioBase = computeNextTicketBase(tickets);
 
     let hasCriticalGenerated = false;
     let mainCriticalTicketId = '';
 
     generatedTicketsData.forEach((gt, idx) => {
-      const folio = `TK-${nextFolioNum + idx}`;
+      const folio = `TK-${String(nextFolioBase + idx).padStart(4, '0')}`;
       generatedTicketFolios.push(folio);
 
       if (gt.severity === 'critica') {
@@ -641,7 +641,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               ...v,
               status: 'bloqueada',
               blockedReason: `Bloqueada por ticket crítico ${mainCriticalTicketId} generado en inspección ${inspId}`,
-              criticalTicketId: mainCriticalTicketId
+              criticalTicketId: mainCriticalTicketId,
+              blockedAt: now
             };
           }
           return v;
@@ -659,7 +660,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           return {
             ...v,
             status: 'activa',
-            blockedReason: `Excepción autorizada (${currentUser.name}): ${reason}`
+            blockedReason: `Excepción autorizada (${currentUser.name}): ${reason}`,
+            criticalTicketId: undefined,
+            blockedAt: undefined
           };
         }
         return v;
@@ -1034,15 +1037,29 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const syncOfflineQueue = () => {
     if (offlineQueue.length === 0) return;
 
+    // Mark every queued offline inspection as synced, then clear the queue.
+    const inspectionIds = new Set<string>();
+    offlineQueue.forEach((item) => {
+      if (item.type === 'INSPECTION_SUBMIT' && 'inspection' in item.payload) {
+        inspectionIds.add(item.payload.inspection.id);
+      }
+    });
+
     setInspections((prev) =>
-      prev.map((insp) => ({ ...insp, isSyncedOffline: false }))
+      prev.map((insp) =>
+        inspectionIds.has(insp.id) ? { ...insp, isSyncedOffline: false } : insp
+      )
     );
 
     setOfflineQueue([]);
   };
 
   const clearAllData = () => {
-    localStorage.clear();
+    // Remove only this app's persisted keys, preserving any unrelated storage.
+    Object.keys(localStorage)
+      .filter((key) => key.startsWith(LOCAL_STORAGE_KEY))
+      .forEach((key) => localStorage.removeItem(key));
+
     setVehicles(initialVehicles);
     setRoutes(initialRoutes);
     setTickets(initialTickets);
@@ -1052,6 +1069,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setPreventivePlans(initialPreventivePlans);
     setDocuments(initialDocuments);
     setOfflineQueue([]);
+    setCurrentUser(initialUsers[0]);
   };
 
   return (
@@ -1107,7 +1125,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         getOpenTicketsForUnit,
         getCriticalUnresolvedTicketForUnit,
         getVehicleForRoute,
-        getRouteForVehicle
+        getRouteForVehicle,
+        getNextTicketFolio
       }}
     >
       {children}
