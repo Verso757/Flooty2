@@ -1,0 +1,6 @@
+{
+  "name": "FlotaCheck PWA - Inspecciones y Mantenimiento",
+  "description": "PWA para gestión de inspecciones de flotillas vehiculares, control de tickets y mantenimiento por roles (Administrador, Mecánico, Operador).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
