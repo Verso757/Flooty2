@@ -1,21 +1,41 @@
 @import "tailwindcss";
 
+@theme {
+  /* Navy — sidebar & dark surfaces (OnlineFleet style) */
+  --color-navy-50: #f0f4f9;
+  --color-navy-100: #d9e2ef;
+  --color-navy-200: #b3c5dd;
+  --color-navy-300: #8aa3c4;
+  --color-navy-400: #5f7fa6;
+  --color-navy-500: #42648b;
+  --color-navy-600: #315072;
+  --color-navy-700: #263f5c;
+  --color-navy-800: #1b2f47;
+  --color-navy-900: #12233a;
+  --color-navy-950: #0a1729;
+
+  /* WhatsApp green accents */
+  --color-whatsapp: #25d366;
+  --color-whatsapp-dark: #1ebe5b;
+  --color-whatsapp-darker: #128c7e;
+}
+
 @layer base {
   :root {
-    --bg-main: #f8fafc;
+    --bg-main: #f6f8fb;
     --bg-surface: #ffffff;
     --bg-card: #ffffff;
     --bg-card-hover: #f1f5f9;
-    --border-color: #e2e8f0;
+    --border-color: #e6eaf1;
     --text-primary: #0f172a;
     --text-secondary: #475569;
     --text-muted: #94a3b8;
   }
 
   body {
-    background-color: #f8fafc;
+    background-color: #f6f8fb;
     color: #0f172a;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     -webkit-tap-highlight-color: transparent;
     letter-spacing: -0.011em;
   }
@@ -23,17 +43,15 @@
 
 @layer utilities {
   .animate-fade-in {
-    animation: fadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: fadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) backwards;
   }
 
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(4px);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
     }
   }
 
@@ -51,5 +69,16 @@
   }
   ::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
+  }
+
+  /* Dark sidebar scrollbar */
+  .sidebar-dark::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .sidebar-dark::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.14);
+  }
+  .sidebar-dark::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.24);
   }
 }

@@ -51,7 +51,7 @@ export const DashboardOverview: React.FC<Props> = ({ onNavigateTab }) => {
       <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span className="w-2 h-2 rounded-full bg-whatsapp" />
             <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-mono">
               Consola de Rutas y Flotilla
             </span>
@@ -65,12 +65,12 @@ export const DashboardOverview: React.FC<Props> = ({ onNavigateTab }) => {
         </div>
 
         {/* Readiness Meter */}
-        <div className="flex items-center gap-3.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200 shrink-0">
+        <div className="flex items-center gap-3.5 bg-navy-950 p-3.5 rounded-xl shrink-0">
           <div className="text-right">
-            <span className="block text-xl font-bold text-slate-900 font-mono">{fleetReadinessPercent}%</span>
-            <span className="block text-[10px] text-slate-500 uppercase font-semibold">Disponibilidad Técnica</span>
+            <span className="block text-xl font-bold text-white font-mono">{fleetReadinessPercent}%</span>
+            <span className="block text-[10px] text-navy-300 uppercase font-semibold">Disponibilidad Técnica</span>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-emerald-100 border border-emerald-200 text-emerald-700 flex items-center justify-center font-bold">
+          <div className="w-10 h-10 rounded-lg bg-whatsapp text-navy-950 flex items-center justify-center font-bold">
             <TrendingUp className="w-5 h-5" />
           </div>
         </div>
@@ -85,7 +85,7 @@ export const DashboardOverview: React.FC<Props> = ({ onNavigateTab }) => {
         >
           <div className="flex items-center justify-between text-slate-500 mb-1">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">Rutas Activas</span>
-            <div className="p-1.5 rounded-lg bg-slate-100 text-slate-700 border border-slate-200">
+            <div className="p-1.5 rounded-lg bg-blue-50 text-blue-600 border border-blue-100">
               <MapPin className="w-4 h-4" />
             </div>
           </div>
@@ -103,7 +103,7 @@ export const DashboardOverview: React.FC<Props> = ({ onNavigateTab }) => {
         >
           <div className="flex items-center justify-between text-slate-500 mb-1">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">Camiones en Flota</span>
-            <div className="p-1.5 rounded-lg bg-slate-100 text-slate-700 border border-slate-200">
+            <div className="p-1.5 rounded-lg bg-navy-50 text-navy-700 border border-navy-100">
               <Truck className="w-4 h-4" />
             </div>
           </div>
@@ -142,7 +142,7 @@ export const DashboardOverview: React.FC<Props> = ({ onNavigateTab }) => {
         >
           <div className="flex items-center justify-between text-slate-500 mb-1">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 font-mono">Tickets de Taller</span>
-            <div className="p-1.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-200">
+            <div className="p-1.5 rounded-lg bg-amber-50 text-amber-600 border border-amber-200">
               <AlertTriangle className="w-4 h-4" />
             </div>
           </div>
@@ -171,7 +171,7 @@ export const DashboardOverview: React.FC<Props> = ({ onNavigateTab }) => {
           </div>
           <button
             onClick={() => onNavigateTab('fleet')}
-            className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold shrink-0 transition-colors cursor-pointer shadow-xs"
+            className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold shrink-0 transition-colors cursor-pointer shadow-xs"
           >
             Reasignar Camiones a Rutas
           </button>
@@ -334,7 +334,7 @@ export const DashboardOverview: React.FC<Props> = ({ onNavigateTab }) => {
                 >
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-slate-900 font-mono text-xs px-1.5 py-0.2 rounded bg-slate-900 text-white">
+                      <span className="font-bold text-slate-900 font-mono text-xs px-1.5 py-0.2 rounded bg-navy-900 text-white">
                         Ruta {r.code}
                       </span>
                       <span className="font-semibold text-slate-800">{r.name}</span>

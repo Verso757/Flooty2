@@ -379,29 +379,48 @@ export const TicketsList: React.FC = () => {
       </div>
 
       {/* Status quick tabs */}
-      <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 sm:mx-0 sm:px-0">
+      <div className="inline-flex flex-wrap gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200">
         <button
           onClick={() => setStatusFilter('ALL')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-bold border shrink-0 cursor-pointer transition-colors ${statusFilter === 'ALL' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
+          className={`px-3.5 py-2 rounded-lg text-xs font-bold shrink-0 cursor-pointer transition-all ${
+            statusFilter === 'ALL'
+              ? 'bg-navy-900 text-white shadow-sm'
+              : 'text-slate-600 hover:bg-white hover:text-slate-900'
+          }`}
         >
           Todos · {tickets.length}
         </button>
         <button
           onClick={() => setStatusFilter('pendiente')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-bold border shrink-0 cursor-pointer transition-colors ${statusFilter === 'pendiente' ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
+          className={`px-3.5 py-2 rounded-lg text-xs font-bold shrink-0 cursor-pointer transition-all flex items-center gap-1.5 ${
+            statusFilter === 'pendiente'
+              ? 'bg-navy-900 text-white shadow-sm'
+              : 'text-slate-600 hover:bg-white hover:text-slate-900'
+          }`}
         >
+          <span className={`w-1.5 h-1.5 rounded-full ${statusFilter === 'pendiente' ? 'bg-amber-400' : 'bg-amber-400'}`} />
           Pendientes · {pendingCount}
         </button>
         <button
           onClick={() => setStatusFilter('en_progreso')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-bold border shrink-0 cursor-pointer transition-colors ${statusFilter === 'en_progreso' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
+          className={`px-3.5 py-2 rounded-lg text-xs font-bold shrink-0 cursor-pointer transition-all flex items-center gap-1.5 ${
+            statusFilter === 'en_progreso'
+              ? 'bg-navy-900 text-white shadow-sm'
+              : 'text-slate-600 hover:bg-white hover:text-slate-900'
+          }`}
         >
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
           En Taller · {inProgressCount}
         </button>
         <button
           onClick={() => setStatusFilter('resuelto')}
-          className={`px-3.5 py-2 rounded-xl text-xs font-bold border shrink-0 cursor-pointer transition-colors ${statusFilter === 'resuelto' ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
+          className={`px-3.5 py-2 rounded-lg text-xs font-bold shrink-0 cursor-pointer transition-all flex items-center gap-1.5 ${
+            statusFilter === 'resuelto'
+              ? 'bg-navy-900 text-white shadow-sm'
+              : 'text-slate-600 hover:bg-white hover:text-slate-900'
+          }`}
         >
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
           Resueltos · {resolvedCount}
         </button>
       </div>
@@ -434,24 +453,22 @@ export const TicketsList: React.FC = () => {
       {viewMode === 'TABLE' && (
         <div className="space-y-3">
           {/* DESKTOP TABLE VIEW */}
-          <div className="hidden bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
+          <div className="hidden md:block bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
             <table className="w-full text-left text-xs text-slate-600">
               <thead className="bg-slate-50 border-b border-slate-200 text-[11px] uppercase tracking-wider text-slate-500 font-bold">
                 <tr>
-                  <th className="py-3.5 px-4 w-28">Folio</th>
-                  <th className="py-3.5 px-4 w-40">Camión & Ruta</th>
-                  <th className="py-3.5 px-4">Falla Reportada</th>
-                  <th className="py-3.5 px-3 w-28 text-center">Severidad</th>
-                  <th className="py-3.5 px-3 w-36">Mecánico</th>
-                  <th className="py-3.5 px-3 w-32 text-center">Estatus</th>
-                  <th className="py-3.5 px-4 w-32 text-right">Costo Total</th>
-                  <th className="py-3.5 px-2 w-10 text-center"></th>
+                  <th className="py-3 px-4 w-28">Folio</th>
+                  <th className="py-3 px-4">Falla & Camión</th>
+                  <th className="py-3 px-3 w-28 text-center">Severidad</th>
+                  <th className="py-3 px-3 w-40">Mecánico</th>
+                  <th className="py-3 px-3 w-32 text-center">Estatus</th>
+                  <th className="py-3 px-4 w-32 text-right">Costo</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filteredTickets.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="py-12 text-center text-slate-400">
+                    <td colSpan={6} className="py-12 text-center text-slate-400">
                       No se encontraron tickets con los filtros seleccionados
                     </td>
                   </tr>
@@ -465,82 +482,67 @@ export const TicketsList: React.FC = () => {
                       <tr
                         key={ticket.id}
                         onClick={() => handleOpenTicketDetails(ticket)}
-                        className="hover:bg-amber-50/50 transition-colors cursor-pointer group"
+                        className="hover:bg-slate-50 transition-colors cursor-pointer group"
                         title="Haz clic para abrir y gestionar esta orden de taller"
                       >
                         {/* 1. FOLIO */}
-                        <td className="py-3.5 px-4 font-mono">
-                          <span className="font-black text-amber-800 text-xs px-2 py-1 bg-amber-50 rounded-md border border-amber-200 group-hover:bg-amber-100 group-hover:border-amber-300 transition-colors">
-                            {ticket.id}
-                          </span>
+                        <td className="py-3 px-4 font-mono align-top">
+                          <span className="font-black text-slate-900 text-xs block">{ticket.id}</span>
+                          <span className="text-[10px] text-slate-400 font-sans">{new Date(ticket.createdAt).toLocaleDateString('es-MX', { day: '2-digit', month: 'short' })}</span>
                         </td>
 
-                        {/* 2. CAMIÓN & RUTA */}
-                        <td className="py-3.5 px-4">
-                          <div className="font-bold text-slate-900 font-mono flex items-center gap-1.5">
-                            <Truck className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                            <span>{ticket.economicNumber ? `Camión #${ticket.economicNumber}` : ticket.unitName}</span>
-                          </div>
-                          {ticket.routeCode ? (
-                            <span className="text-[10px] text-blue-700 font-bold font-mono">
-                              Ruta {ticket.routeCode}
-                            </span>
-                          ) : (
-                            <span className="text-[10px] text-slate-400">Sin ruta</span>
-                          )}
-                        </td>
-
-                        {/* 3. FALLA & CATEGORÍA */}
-                        <td className="py-3.5 px-4">
-                          <div className="font-bold text-slate-900 group-hover:text-amber-950 transition-colors line-clamp-1">
+                        {/* 2. FALLA & CAMIÓN */}
+                        <td className="py-3 px-4 align-top">
+                          <div className="font-bold text-slate-900 group-hover:text-blue-700 transition-colors line-clamp-1">
                             {ticket.title}
                           </div>
-                          <div className="text-[10px] text-slate-400 mt-0.5 line-clamp-1">
-                            <span className="font-medium text-slate-500">{ticket.category}</span>
-                            {ticket.description && (
-                              <span className="ml-1.5 text-slate-400">• {ticket.description}</span>
-                            )}
+                          <div className="flex items-center gap-1.5 text-[11px] text-slate-500 mt-0.5 line-clamp-1">
+                            <Truck className="w-3 h-3 text-slate-400 shrink-0" />
+                            <span className="font-medium text-slate-600">{ticket.economicNumber ? `Camión #${ticket.economicNumber}` : ticket.unitName}</span>
+                            {ticket.routeCode && <span className="text-blue-600 font-bold">• Ruta {ticket.routeCode}</span>}
+                            <span className="text-slate-300">•</span>
+                            <span>{ticket.category}</span>
                           </div>
                         </td>
 
-                        {/* 4. SEVERIDAD */}
-                        <td className="py-3.5 px-3 text-center">
+                        {/* 3. SEVERIDAD */}
+                        <td className="py-3 px-3 text-center align-top">
                           <span className={`inline-block text-[10px] font-bold uppercase px-2 py-0.5 rounded-md border ${sevInfo.color}`}>
                             {sevInfo.label}
                           </span>
                         </td>
 
-                        {/* 5. MECÁNICO */}
-                        <td className="py-3.5 px-3">
+                        {/* 4. MECÁNICO */}
+                        <td className="py-3 px-3 align-top">
                           {ticket.assignedTo ? (
                             <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md truncate max-w-full">
                               <UserCheck className="w-3 h-3 text-slate-500 shrink-0" />
                               <span className="truncate">{ticket.assignedTo}</span>
                             </span>
                           ) : (
-                            <span className="text-[11px] text-amber-600 font-medium italic">
+                            <span className="text-[11px] text-slate-400 font-medium italic">
                               Sin asignar
                             </span>
                           )}
                         </td>
 
-                        {/* 6. ESTATUS */}
-                        <td className="py-3.5 px-3 text-center">
+                        {/* 5. ESTATUS */}
+                        <td className="py-3 px-3 text-center align-top">
                           <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[10px] font-bold border capitalize ${statusInfo.color}`}>
                             <span className="w-1.5 h-1.5 rounded-full bg-current" />
                             <span>{statusInfo.label}</span>
                           </span>
                         </td>
 
-                        {/* 7. COSTO (Clickable to quick-edit or full modal) */}
-                        <td className="py-3.5 px-4 text-right font-mono">
+                        {/* 6. COSTO (Clickable to quick-edit) */}
+                        <td className="py-3 px-4 text-right font-mono align-top">
                           <button
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleOpenQuickCostModal(ticket);
                             }}
-                            className="text-right hover:bg-amber-100 p-1 rounded-lg transition-colors cursor-pointer"
+                            className="text-right hover:bg-amber-50 p-1 rounded-lg transition-colors cursor-pointer"
                             title="Haz clic para modificar costo rápido"
                           >
                             <span className="font-black text-slate-900 block text-xs">
@@ -550,11 +552,6 @@ export const TicketsList: React.FC = () => {
                               {partsCount > 0 ? `${partsCount} refacc.` : 'Mano de obra'}
                             </span>
                           </button>
-                        </td>
-
-                        {/* 8. CHEVRON INDICATOR */}
-                        <td className="py-3.5 px-2 text-center text-slate-300 group-hover:text-amber-700 transition-colors">
-                          <ChevronRight className="w-4 h-4 inline-block" />
                         </td>
                       </tr>
                     );
@@ -580,7 +577,7 @@ export const TicketsList: React.FC = () => {
           </div>
 
           {/* Unified ticket list (responsive cards) */}
-          <div className="space-y-3">
+          <div className="space-y-3 md:hidden">
             {filteredTickets.length === 0 ? (
               <div className="p-10 text-center text-slate-400 bg-white border border-dashed border-slate-200 rounded-xl text-sm">
                 No hay órdenes con los filtros seleccionados.
@@ -859,16 +856,16 @@ export const TicketsList: React.FC = () => {
       {selectedTicket && (
         <div
           onMouseDown={(e) => { if (e.target === e.currentTarget) setSelectedTicket(null); }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-slate-900/40 backdrop-blur-sm animate-fade-in overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-slate-900/60 animate-fade-in overflow-y-auto"
         >
-          <div className="bg-white sm:border border-slate-200 rounded-2xl max-w-4xl w-full shadow-2xl overflow-hidden flex flex-col max-h-[90vh] my-auto">
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-4xl w-full overflow-hidden flex flex-col max-h-[90vh] my-auto shadow-sm">
             {/* Modal Header */}
-            <div className="p-3.5 sm:p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-3">
-                <span className="font-mono font-black text-xs sm:text-sm px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 shadow-xs">
+            <div className="p-4 sm:p-5 bg-white border-b border-slate-100 flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-3 min-w-0">
+                <span className="font-mono font-black text-xs sm:text-sm px-2.5 py-1 rounded-lg bg-navy-950 text-white shrink-0">
                   {selectedTicket.id}
                 </span>
-                <div>
+                <div className="min-w-0">
                   <h3 className="font-bold text-slate-900 text-xs sm:text-sm leading-tight line-clamp-1">
                     {selectedTicket.title}
                   </h3>
@@ -876,21 +873,19 @@ export const TicketsList: React.FC = () => {
                     <Truck className="w-3.5 h-3.5 text-slate-400" />
                     <span>{selectedTicket.economicNumber ? `Camión #${selectedTicket.economicNumber}` : selectedTicket.unitName}</span>
                     {selectedTicket.routeCode && (
-                      <span className="text-blue-700 font-bold">• Ruta {selectedTicket.routeCode}</span>
+                      <span className="text-blue-600 font-bold">• Ruta {selectedTicket.routeCode}</span>
                     )}
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => setSelectedTicket(null)}
-                  className="p-1.5 rounded-lg bg-white border border-slate-200 text-slate-500 hover:text-slate-900 hover:bg-slate-100 cursor-pointer shadow-xs transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedTicket(null)}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-900 hover:bg-slate-100 cursor-pointer transition-colors shrink-0"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
 
             {/* Modal Tabs Navigation */}
@@ -900,7 +895,7 @@ export const TicketsList: React.FC = () => {
                 onClick={() => setModalTab('DETAILS')}
                 className={`py-2.5 px-3 text-xs font-bold border-b-2 transition-colors cursor-pointer shrink-0 ${
                   modalTab === 'DETAILS'
-                    ? 'border-slate-900 text-slate-900'
+                    ? 'border-blue-600 text-blue-700'
                     : 'border-transparent text-slate-500 hover:text-slate-800'
                 }`}
               >
@@ -911,7 +906,7 @@ export const TicketsList: React.FC = () => {
                 onClick={() => setModalTab('PARTS')}
                 className={`py-2.5 px-3 text-xs font-bold border-b-2 transition-colors cursor-pointer shrink-0 flex items-center gap-1.5 ${
                   modalTab === 'PARTS'
-                    ? 'border-slate-900 text-slate-900'
+                    ? 'border-blue-600 text-blue-700'
                     : 'border-transparent text-slate-500 hover:text-slate-800'
                 }`}
               >
@@ -925,7 +920,7 @@ export const TicketsList: React.FC = () => {
                 onClick={() => setModalTab('MECHANIC')}
                 className={`py-2.5 px-3 text-xs font-bold border-b-2 transition-colors cursor-pointer shrink-0 ${
                   modalTab === 'MECHANIC'
-                    ? 'border-slate-900 text-slate-900'
+                    ? 'border-blue-600 text-blue-700'
                     : 'border-transparent text-slate-500 hover:text-slate-800'
                 }`}
               >
@@ -936,7 +931,7 @@ export const TicketsList: React.FC = () => {
                 onClick={() => setModalTab('PRINT')}
                 className={`py-2.5 px-3 text-xs font-bold border-b-2 transition-colors cursor-pointer shrink-0 flex items-center gap-1 ${
                   modalTab === 'PRINT'
-                    ? 'border-slate-900 text-slate-900'
+                    ? 'border-blue-600 text-blue-700'
                     : 'border-transparent text-slate-500 hover:text-slate-800'
                 }`}
               >
@@ -946,7 +941,7 @@ export const TicketsList: React.FC = () => {
             </div>
 
             {/* Modal Body with Scroll */}
-            <div className="p-4 sm:p-5 overflow-y-auto flex-1 space-y-4">
+            <div className="p-4 sm:p-5 overflow-y-auto flex-1 space-y-4 bg-slate-50">
               {/* TAB 1: DIAGNÓSTICO & EVIDENCIA */}
               {modalTab === 'DETAILS' && (
                 <div className="space-y-4">
@@ -954,7 +949,7 @@ export const TicketsList: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Left Column: Details & Fault */}
                     <div className="space-y-3">
-                      <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2.5">
+                      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2.5">
                         <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">
                           Detalle de la Falla Reportada:
                         </span>
@@ -1010,7 +1005,7 @@ export const TicketsList: React.FC = () => {
                       </div>
 
                       {/* Photos Grid */}
-                      <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+                      <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
                         <h4 className="text-xs font-bold text-slate-900 mb-2 flex items-center gap-1.5">
                           <ImageIcon className="w-4 h-4 text-slate-500" />
                           <span>Fotografías de Evidencia ({selectedTicket.photos?.length || 0})</span>
@@ -1031,7 +1026,7 @@ export const TicketsList: React.FC = () => {
                             ))}
                           </div>
                         ) : (
-                          <div className="p-4 text-center border border-dashed border-slate-200 rounded-lg text-slate-400 text-xs bg-white">
+                          <div className="p-4 text-center border border-dashed border-slate-200 rounded-lg text-slate-400 text-xs bg-slate-50">
                             Sin fotos de evidencia adjuntas.
                           </div>
                         )}
@@ -1045,7 +1040,7 @@ export const TicketsList: React.FC = () => {
                       <h4 className="text-xs font-bold text-slate-900">Historial de Reconfirmaciones Diarias</h4>
                       <div className="space-y-1.5">
                         {selectedTicket.reconfirmationHistory.map((rec, idx) => (
-                          <div key={idx} className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs flex items-center justify-between">
+                          <div key={idx} className="p-2.5 rounded-lg bg-white border border-slate-200 text-xs flex items-center justify-between shadow-xs">
                             <div>
                               <span className="font-bold text-slate-800">{new Date(rec.date).toLocaleDateString()}</span>
                               <span className="text-slate-500 ml-2">por {rec.confirmedBy}</span>
@@ -1075,7 +1070,7 @@ export const TicketsList: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Left Column: Spare Parts List & Total Summary */}
                     <div className="space-y-3">
-                      <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-3">
+                      <div className="bg-white border border-slate-200 rounded-xl p-3.5 shadow-xs space-y-3">
                         <div className="flex items-center justify-between border-b border-slate-200 pb-2">
                           <span className="text-xs font-bold text-slate-800 uppercase font-mono">
                             Refacciones Cambiadas ({tempParts.length})
@@ -1086,13 +1081,13 @@ export const TicketsList: React.FC = () => {
                         </div>
 
                         {tempParts.length === 0 ? (
-                          <div className="p-4 text-center border border-dashed border-slate-300 rounded-lg text-slate-400 text-xs bg-white">
+                          <div className="p-4 text-center border border-dashed border-slate-300 rounded-lg text-slate-400 text-xs bg-slate-50">
                             No hay refacciones agregadas aún. Registra las piezas cambiadas a la derecha.
                           </div>
                         ) : (
                           <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
                             {tempParts.map((part) => (
-                              <div key={part.id} className="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200 text-xs shadow-2xs">
+                              <div key={part.id} className="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-200 text-xs shadow-2xs">
                                 <div className="min-w-0 pr-2">
                                   <span className="font-bold text-slate-800 block truncate">{part.description}</span>
                                   {part.partNumber && (
@@ -1119,7 +1114,7 @@ export const TicketsList: React.FC = () => {
                       </div>
 
                       {/* Mano de Obra y Total General */}
-                      <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2.5">
+                      <div className="bg-white border border-slate-200 rounded-xl p-3.5 shadow-xs space-y-2.5">
                         <div>
                           <label className="block text-[11px] font-bold text-slate-700 mb-1">
                             Mano de Obra / Cargo Directo ($ MXN):
@@ -1131,7 +1126,7 @@ export const TicketsList: React.FC = () => {
                               min="0"
                               value={tempLaborCost}
                               onChange={(e) => setTempLaborCost(Number(e.target.value))}
-                              className="w-full bg-white border border-slate-200 focus:border-slate-400 rounded-lg pl-6 pr-3 py-1.5 text-xs font-mono font-bold text-slate-900 outline-none"
+                              className="w-full bg-slate-50 border border-slate-200 focus:border-blue-400 rounded-lg pl-6 pr-3 py-1.5 text-xs font-mono font-bold text-slate-900 outline-none"
                               placeholder="0"
                             />
                           </div>
@@ -1160,7 +1155,7 @@ export const TicketsList: React.FC = () => {
                     {/* Right Column: Add Part Form + Invoice */}
                     <div className="space-y-3">
                       {/* Form to Add Spare Part */}
-                      <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5 text-xs">
+                      <div className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-xs space-y-2.5 text-xs">
                         <span className="text-[11px] font-bold text-slate-800 block flex items-center gap-1">
                           <Plus className="w-3.5 h-3.5 text-slate-500" />
                           <span>+ Agregar Refacción al Ticket:</span>
@@ -1171,14 +1166,14 @@ export const TicketsList: React.FC = () => {
                             placeholder="Descripción (ej. Balatas, Filtro aceite)"
                             value={newPartDesc}
                             onChange={(e) => setNewPartDesc(e.target.value)}
-                            className="w-full bg-white border border-slate-200 focus:border-slate-400 rounded-lg px-3 py-1.5 text-xs text-slate-900 outline-none"
+                            className="w-full bg-slate-50 border border-slate-200 focus:border-blue-400 rounded-lg px-3 py-1.5 text-xs text-slate-900 outline-none"
                           />
                           <input
                             type="text"
                             placeholder="N° de Parte / Código (opcional)"
                             value={newPartNumber}
                             onChange={(e) => setNewPartNumber(e.target.value)}
-                            className="w-full bg-white border border-slate-200 focus:border-slate-400 rounded-lg px-3 py-1.5 text-xs text-slate-900 font-mono outline-none"
+                            className="w-full bg-slate-50 border border-slate-200 focus:border-blue-400 rounded-lg px-3 py-1.5 text-xs text-slate-900 font-mono outline-none"
                           />
                           <div className="grid grid-cols-2 gap-2">
                             <div>
@@ -1188,7 +1183,7 @@ export const TicketsList: React.FC = () => {
                                 min="1"
                                 value={newPartQty}
                                 onChange={(e) => setNewPartQty(Number(e.target.value))}
-                                className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-mono font-bold"
+                                className="w-full bg-slate-50 border border-slate-200 focus:border-blue-400 rounded-lg px-2.5 py-1.5 text-xs font-mono font-bold"
                               />
                             </div>
                             <div>
@@ -1198,7 +1193,7 @@ export const TicketsList: React.FC = () => {
                                 min="0"
                                 value={newPartUnitCost}
                                 onChange={(e) => setNewPartUnitCost(Number(e.target.value))}
-                                className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-mono font-bold"
+                                className="w-full bg-slate-50 border border-slate-200 focus:border-blue-400 rounded-lg px-2.5 py-1.5 text-xs font-mono font-bold"
                               />
                             </div>
                           </div>
@@ -1213,7 +1208,7 @@ export const TicketsList: React.FC = () => {
                       </div>
 
                       {/* Factura / Comprobante */}
-                      <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2 text-xs">
+                      <div className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-xs space-y-2 text-xs">
                         <label className="block text-[11px] font-bold text-slate-700">
                           Folio de Factura Fiscal:
                         </label>
@@ -1222,7 +1217,7 @@ export const TicketsList: React.FC = () => {
                           placeholder="Ej. FAC-2026-901"
                           value={tempInvoiceFolio}
                           onChange={(e) => setTempInvoiceFolio(e.target.value)}
-                          className="w-full bg-white border border-slate-200 focus:border-slate-400 rounded-lg px-3 py-1.5 text-xs font-mono font-bold uppercase text-slate-900 outline-none"
+                          className="w-full bg-slate-50 border border-slate-200 focus:border-blue-400 rounded-lg px-3 py-1.5 text-xs font-mono font-bold uppercase text-slate-900 outline-none"
                         />
 
                         {tempInvoiceUrl ? (
@@ -1264,14 +1259,14 @@ export const TicketsList: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Left Column: Mechanic Assignment & Status */}
                     <div className="space-y-3">
-                      <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2">
                         <label className="block text-xs font-bold text-slate-900">
                           Asignar Mecánico Responsable:
                         </label>
                         <select
                           value={selectedMechanicInput}
                           onChange={(e) => handleAssignMechanic(selectedTicket.id, e.target.value)}
-                          className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 outline-none cursor-pointer"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 outline-none cursor-pointer"
                         >
                           <option value="">-- Selecciona Mecánico del Taller --</option>
                           {mechanics.map((m) => (
@@ -1282,7 +1277,7 @@ export const TicketsList: React.FC = () => {
                         </select>
                       </div>
 
-                      <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2">
                         <label className="block text-xs font-bold text-slate-900">
                           Actualizar Estatus de la Orden:
                         </label>
@@ -1325,7 +1320,7 @@ export const TicketsList: React.FC = () => {
                     </div>
 
                     {/* Right Column: Resolution Notes */}
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2.5">
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2.5">
                       <label className="block text-xs font-bold text-slate-900">
                         Dictamen Técnico de Trabajo Realizado:
                       </label>
@@ -1334,7 +1329,7 @@ export const TicketsList: React.FC = () => {
                         placeholder="Escribe la bitácora técnica de reparación, piezas sustituidas, ajustes mecánicos y pruebas de patio realizadas..."
                         value={resolutionNoteInput}
                         onChange={(e) => setResolutionNoteInput(e.target.value)}
-                        className="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs text-slate-900 outline-none focus:border-slate-400 leading-relaxed"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-900 outline-none focus:border-blue-400 leading-relaxed"
                       />
                     </div>
                   </div>
@@ -1434,7 +1429,7 @@ export const TicketsList: React.FC = () => {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between shrink-0">
+            <div className="p-3.5 sm:p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between shrink-0">
               <span className="text-xs text-slate-500 font-mono">
                 Folio: <strong>{selectedTicket.id}</strong>
               </span>
@@ -1442,7 +1437,7 @@ export const TicketsList: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSelectedTicket(null)}
-                className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs cursor-pointer shadow-xs"
+                className="px-4 py-2 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs cursor-pointer shadow-xs"
               >
                 Cerrar
               </button>
@@ -1585,7 +1580,7 @@ export const TicketsList: React.FC = () => {
       {activePhotoModal && (
         <div
           onClick={() => setActivePhotoModal(null)}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/90 backdrop-blur-xs cursor-pointer animate-fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 cursor-pointer animate-fade-in"
         >
           <div className="relative max-w-2xl max-h-[85vh] rounded-2xl overflow-hidden border border-slate-700 shadow-2xl bg-black">
             <img src={activePhotoModal} alt="Evidencia ampliada" className="max-w-full max-h-[85vh] object-contain" />

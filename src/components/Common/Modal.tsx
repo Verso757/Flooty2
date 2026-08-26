@@ -52,7 +52,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 animate-fade-in"
       role="dialog"
       aria-modal="true"
       onMouseDown={() => {
@@ -60,7 +60,7 @@ export const Modal: React.FC<ModalProps> = ({
       }}
     >
       <div
-        className={`bg-white border border-slate-200 rounded-2xl w-full ${sizeClasses[size]} shadow-2xl flex flex-col max-h-[90vh]`}
+        className={`bg-white rounded-2xl w-full ${sizeClasses[size]} ring-1 ring-slate-900/10 shadow-sm flex flex-col max-h-[90vh]`}
         onMouseDown={(e) => e.stopPropagation()}
       >
         {(title || showCloseButton) && (

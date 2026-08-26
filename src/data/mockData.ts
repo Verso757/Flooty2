@@ -5,6 +5,7 @@ export const initialUsers: User[] = [
     id: 'usr-operador-1',
     name: 'Juan Pérez (Chofer Ruta 125)',
     role: 'operador',
+    email: 'ruta125@flotacheck.com',
     phone: '+52 55 1234 5678',
     defaultRouteId: 'r-125',
     defaultVehicleId: 'v-507',
@@ -47,6 +48,7 @@ export const initialUsers: User[] = [
     id: 'usr-mecanico-1',
     name: 'Roberto Gómez (Jefe de Taller)',
     role: 'mecanico',
+    email: 'taller@flotacheck.com',
     phone: '+52 55 9876 5432',
     avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&q=80&w=150'
   },
@@ -61,6 +63,7 @@ export const initialUsers: User[] = [
     id: 'usr-admin-1',
     name: 'Carlos Mendoza (Supervisor de Flotilla)',
     role: 'administrador',
+    email: 'gerencia@flotacheck.com',
     phone: '+52 55 5555 1234',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150'
   }
