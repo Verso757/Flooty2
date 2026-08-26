@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Ticket, TicketStatus, Severity, TicketSparePart } from '../../types';
 import { useApp } from '../../context/AppContext';
+import { Modal } from '../Common/Modal';
 import {
   Wrench,
   AlertTriangle,
@@ -823,30 +824,12 @@ export const TicketsList: React.FC = () => {
       {/* MODAL 1: QUICK 1-CLICK COST & INVOICE EDITOR */}
       {/* ========================================================= */}
       {isQuickCostModalOpen && quickCostTicket && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in overflow-y-auto">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-4 my-auto">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center shrink-0">
-                  <DollarSign className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900">
-                    Modificar Costo de Orden {quickCostTicket.id}
-                  </h3>
-                  <p className="text-[11px] text-slate-500 font-mono">
-                    {quickCostTicket.economicNumber ? `Camión #${quickCostTicket.economicNumber}` : quickCostTicket.unitName} — {quickCostTicket.title}
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsQuickCostModalOpen(false)}
-                className="p-1.5 rounded-lg bg-slate-100 text-slate-500 hover:bg-slate-200 cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+        <Modal
+          isOpen
+          onClose={() => setIsQuickCostModalOpen(false)}
+          title={`Modificar Costo de Orden ${quickCostTicket.id}`}
+          subtitle={quickCostTicket.economicNumber ? `Camión #${quickCostTicket.economicNumber}` : quickCostTicket.unitName}
+        >
 
             {quickSaveAlert && (
               <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-bold flex items-center gap-2 animate-fade-in">
@@ -940,15 +923,17 @@ export const TicketsList: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
+        </Modal>
       )}
 
       {/* ========================================================= */}
       {/* MODAL 2: FULL TICKET DETAILS & WORKSHOP ORDER */}
       {/* ========================================================= */}
       {selectedTicket && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-slate-900/40 backdrop-blur-sm animate-fade-in overflow-y-auto">
+        <div
+          onMouseDown={(e) => { if (e.target === e.currentTarget) setSelectedTicket(null); }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-slate-900/40 backdrop-blur-sm animate-fade-in overflow-y-auto"
+        >
           <div className="bg-white sm:border border-slate-200 rounded-2xl max-w-4xl w-full shadow-2xl overflow-hidden flex flex-col max-h-[90vh] my-auto">
             {/* Modal Header */}
             <div className="p-3.5 sm:p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between shrink-0">
@@ -1542,22 +1527,12 @@ export const TicketsList: React.FC = () => {
       {/* ========================================================= */}
       {/* MODAL 3: ALTA DE NUEVA ORDEN DIRECTA DE TALLER */}
       {/* ========================================================= */}
-      {isNewTicketModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <Plus className="w-4 h-4 text-amber-600" />
-                <span>Nueva Orden Directa de Taller</span>
-              </h3>
-              <button
-                type="button"
-                onClick={() => setIsNewTicketModalOpen(false)}
-                className="p-1 rounded-lg bg-slate-100 text-slate-500 hover:bg-slate-200 cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+      <Modal
+        isOpen={isNewTicketModalOpen}
+        onClose={() => setIsNewTicketModalOpen(false)}
+        title="Nueva Orden Directa de Taller"
+        size="lg"
+      >
 
             <form onSubmit={handleCreateManualTicket} className="space-y-3 text-xs">
               <div>
@@ -1677,9 +1652,7 @@ export const TicketsList: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+      </Modal>
 
       {/* FULL PHOTO ZOOM MODAL */}
       {activePhotoModal && (

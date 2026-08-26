@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Vehicle, Route, RouteAssignmentHistory, User } from '../../types';
 import { useApp } from '../../context/AppContext';
+import { Modal } from '../Common/Modal';
 import {
   Truck,
   MapPin,
@@ -998,21 +999,11 @@ export const FleetManagement: React.FC = () => {
       {/* ==================================================== */}
       {/* MODAL: ALTA / EDICIÓN DE RUTA */}
       {/* ==================================================== */}
-      {isRouteModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 max-w-md w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-slate-700" />
-                <span>{selectedRoute ? 'Editar Ruta' : 'Dar de Alta Nueva Ruta'}</span>
-              </h3>
-              <button
-                onClick={() => setIsRouteModalOpen(false)}
-                className="p-1 rounded-lg bg-slate-100 text-slate-500 hover:text-slate-900 cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+      <Modal
+        isOpen={isRouteModalOpen}
+        onClose={() => setIsRouteModalOpen(false)}
+        title={selectedRoute ? 'Editar Ruta' : 'Dar de Alta Nueva Ruta'}
+      >
 
             <form onSubmit={handleSaveRoute} className="space-y-3 text-xs">
               <div className="grid grid-cols-2 gap-3">
@@ -1122,28 +1113,16 @@ export const FleetManagement: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+      </Modal>
 
       {/* ==================================================== */}
       {/* MODAL: ALTA / EDICIÓN DE CAMIÓN */}
       {/* ==================================================== */}
-      {isTruckModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 max-w-md w-full shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <Truck className="w-4 h-4 text-slate-700" />
-                <span>{selectedTruck ? 'Editar Camión' : 'Dar de Alta Nuevo Camión'}</span>
-              </h3>
-              <button
-                onClick={() => setIsTruckModalOpen(false)}
-                className="p-1 rounded-lg bg-slate-100 text-slate-500 hover:text-slate-900 cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+      <Modal
+        isOpen={isTruckModalOpen}
+        onClose={() => setIsTruckModalOpen(false)}
+        title={selectedTruck ? 'Editar Camión' : 'Dar de Alta Nuevo Camión'}
+      >
 
             <form onSubmit={handleSaveTruck} className="space-y-3 text-xs">
               <div className="grid grid-cols-2 gap-3">
@@ -1303,28 +1282,16 @@ export const FleetManagement: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+      </Modal>
 
       {/* ==================================================== */}
       {/* MODAL: ALTA / EDICIÓN DE CHOFER / OPERADOR */}
       {/* ==================================================== */}
-      {isUserModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 max-w-md w-full shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <Users className="w-4 h-4 text-slate-700" />
-                <span>{selectedUser ? 'Editar Chofer / Usuario' : 'Dar de Alta Chofer'}</span>
-              </h3>
-              <button
-                onClick={() => setIsUserModalOpen(false)}
-                className="p-1 rounded-lg bg-slate-100 text-slate-500 hover:text-slate-900 cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+      <Modal
+        isOpen={isUserModalOpen}
+        onClose={() => setIsUserModalOpen(false)}
+        title={selectedUser ? 'Editar Chofer / Usuario' : 'Dar de Alta Chofer'}
+      >
 
             <form onSubmit={handleSaveUser} className="space-y-3 text-xs">
               <div>
@@ -1445,28 +1412,17 @@ export const FleetManagement: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+      </Modal>
 
       {/* ==================================================== */}
       {/* MODAL: CAMBIO RÁPIDO DE CAMIÓN POR DESCOMPOSTURA */}
       {/* ==================================================== */}
       {isSwapModalOpen && swapRoute && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 max-w-md w-full shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <RefreshCw className="w-4 h-4 text-amber-600" />
-                <span>Cambiar Camión para {swapRoute.name}</span>
-              </h3>
-              <button
-                onClick={() => setIsSwapModalOpen(false)}
-                className="p-1 rounded-lg bg-slate-100 text-slate-500 hover:text-slate-900 cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+        <Modal
+          isOpen
+          onClose={() => setIsSwapModalOpen(false)}
+          title={`Cambiar Camión para ${swapRoute.name}`}
+        >
 
             {swapSuccessAlert ? (
               <div className="p-4 bg-emerald-50 text-emerald-800 rounded-xl border border-emerald-200 text-xs font-bold text-center">
@@ -1531,28 +1487,19 @@ export const FleetManagement: React.FC = () => {
                 </div>
               </form>
             )}
-          </div>
-        </div>
+        </Modal>
       )}
 
       {/* ==================================================== */}
       {/* MODAL: HISTORIAL DE ASIGNACIONES DE LA RUTA */}
       {/* ==================================================== */}
       {viewingHistoryRoute && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 max-w-lg w-full max-h-[85vh] flex flex-col shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <History className="w-4 h-4 text-slate-700" />
-                <span>Historial de Asignaciones: {viewingHistoryRoute.name}</span>
-              </h3>
-              <button
-                onClick={() => setViewingHistoryRoute(null)}
-                className="p-1 rounded-lg bg-slate-100 text-slate-500 hover:text-slate-900 cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+        <Modal
+          isOpen
+          onClose={() => setViewingHistoryRoute(null)}
+          title={`Historial de Asignaciones: ${viewingHistoryRoute.name}`}
+          size="lg"
+        >
 
             <div className="overflow-y-auto flex-1 space-y-3">
               {viewingHistoryRoute.history && viewingHistoryRoute.history.length > 0 ? (
@@ -1573,14 +1520,13 @@ export const FleetManagement: React.FC = () => {
               )}
             </div>
 
-            <button
-              onClick={() => setViewingHistoryRoute(null)}
-              className="w-full py-2 rounded-xl bg-slate-900 text-white font-bold text-xs cursor-pointer"
-            >
-              Cerrar
-            </button>
-          </div>
-        </div>
+          <button
+            onClick={() => setViewingHistoryRoute(null)}
+            className="w-full py-2 rounded-xl bg-slate-900 text-white font-bold text-xs cursor-pointer"
+          >
+            Cerrar
+          </button>
+        </Modal>
       )}
     </div>
   );

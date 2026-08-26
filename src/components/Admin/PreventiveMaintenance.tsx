@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PreventivePlan, Vehicle } from '../../types';
 import { useApp } from '../../context/AppContext';
+import { Modal } from '../Common/Modal';
 import {
   Wrench,
   AlertTriangle,
@@ -396,24 +397,12 @@ export const PreventiveMaintenance: React.FC = () => {
       </div>
 
       {/* Modal: Registrar Servicio Realizado */}
-      {isCompleteModalOpen && selectedPlanForComplete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 max-w-md w-full shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center">
-                  <Check className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900">
-                    Completar Servicio Preventivo
-                  </h3>
-                  <p className="text-[11px] text-slate-500">
-                    Camión #{selectedPlanForComplete.economicNumber} • {selectedPlanForComplete.serviceTitle}
-                  </p>
-                </div>
-              </div>
-            </div>
+      <Modal
+        isOpen={isCompleteModalOpen}
+        onClose={() => setIsCompleteModalOpen(false)}
+        title="Completar Servicio Preventivo"
+        subtitle={`Camión #${selectedPlanForComplete?.economicNumber} • ${selectedPlanForComplete?.serviceTitle}`}
+      >
 
             <form onSubmit={handleConfirmCompleteService} className="space-y-3.5">
               <div>
@@ -469,29 +458,15 @@ export const PreventiveMaintenance: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+      </Modal>
 
       {/* Modal: Programar Nueva Rutina */}
-      {isNewPlanModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 max-w-md w-full shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center">
-                  <Plus className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900">
-                    Nueva Rutina Preventiva
-                  </h3>
-                  <p className="text-[11px] text-slate-500">
-                    Configura frecuencia por odómetro y calendario
-                  </p>
-                </div>
-              </div>
-            </div>
+      <Modal
+        isOpen={isNewPlanModalOpen}
+        onClose={() => setIsNewPlanModalOpen(false)}
+        title="Nueva Rutina Preventiva"
+        subtitle="Configura frecuencia por odómetro y calendario"
+      >
 
             <form onSubmit={handleSaveNewPlan} className="space-y-3.5">
               <div>
@@ -594,9 +569,7 @@ export const PreventiveMaintenance: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+      </Modal>
     </div>
   );
 };

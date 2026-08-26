@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FleetDocument, DocumentType, Vehicle } from '../../types';
 import { useApp } from '../../context/AppContext';
+import { Modal } from '../Common/Modal';
 import {
   FileText,
   Shield,
@@ -360,24 +361,12 @@ export const DocumentWallet: React.FC = () => {
       </div>
 
       {/* Modal: Registrar / Renovar Documento */}
-      {isNewDocModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 max-w-md w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center">
-                  <FileText className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900">
-                    Registrar / Renovar Documento
-                  </h3>
-                  <p className="text-[11px] text-slate-500">
-                    Control de pólizas, verificaciones y licencias
-                  </p>
-                </div>
-              </div>
-            </div>
+      <Modal
+        isOpen={isNewDocModalOpen}
+        onClose={() => setIsNewDocModalOpen(false)}
+        title="Registrar / Renovar Documento"
+        subtitle="Control de pólizas, verificaciones y licencias"
+      >
 
             <form onSubmit={handleSaveDoc} className="space-y-3.5">
               {/* Category */}
@@ -549,9 +538,7 @@ export const DocumentWallet: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+      </Modal>
     </div>
   );
 };

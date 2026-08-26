@@ -6,6 +6,7 @@ import { TicketConfirmationModal } from './TicketConfirmationModal';
 import { ChecklistWizard } from './ChecklistWizard';
 import { InspectionSummary } from './InspectionSummary';
 import { QrScannerModal } from '../Common/QrScannerModal';
+import { Modal } from '../Common/Modal';
 import {
   MapPin,
   Truck,
@@ -477,23 +478,12 @@ export const VehicleList: React.FC = () => {
 
       {/* SWAP TRUCK MODAL (Cambio de Camión a Ruta por descompostura o inservible) */}
       {isSwapModalOpen && targetSwapRoute && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 max-w-md w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center">
-                  <RefreshCw className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900">
-                    Cambiar Camión Asignado a {targetSwapRoute.name}
-                  </h3>
-                  <p className="text-[11px] text-slate-500">
-                    Sustituir unidad titular si está inservible o en taller.
-                  </p>
-                </div>
-              </div>
-            </div>
+        <Modal
+          isOpen
+          onClose={() => setIsSwapModalOpen(false)}
+          title={`Cambiar Camión Asignado a ${targetSwapRoute.name}`}
+          subtitle="Sustituir unidad titular si está inservible o en taller."
+        >
 
             {swapSuccessMsg ? (
               <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs font-bold text-center flex items-center justify-center gap-2 animate-fade-in">
@@ -583,8 +573,7 @@ export const VehicleList: React.FC = () => {
                 </div>
               </form>
             )}
-          </div>
-        </div>
+        </Modal>
       )}
     </div>
   );

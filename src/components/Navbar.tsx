@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { UserRole } from '../types';
+import { Modal } from './Common/Modal';
 import {
   Truck,
   ShieldCheck,
@@ -145,15 +146,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onSwitchRole }) => {
       </header>
 
       {/* Role Switcher Modal */}
-      {showRoleModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 max-w-sm w-full shadow-2xl space-y-4">
-            <div className="border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-bold text-slate-900">Cambiar Perfil de Usuario</h3>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Selecciona la función requerida para validar los permisos de la estación.
-              </p>
-            </div>
+      <Modal
+        isOpen={showRoleModal}
+        onClose={() => setShowRoleModal(false)}
+        title="Cambiar Perfil de Usuario"
+        subtitle="Selecciona la función requerida para validar los permisos de la estación."
+        size="sm"
+      >
 
             <div className="space-y-2">
               <button
@@ -223,15 +222,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onSwitchRole }) => {
               </button>
             </div>
 
-            <button
-              onClick={() => setShowRoleModal(false)}
-              className="w-full py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer"
-            >
-              Cerrar
-            </button>
-          </div>
-        </div>
-      )}
+          <button
+            onClick={() => setShowRoleModal(false)}
+            className="w-full py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer"
+          >
+            Cerrar
+          </button>
+      </Modal>
     </>
   );
 };
