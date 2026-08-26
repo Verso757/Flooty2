@@ -358,157 +358,83 @@ export const TicketsList: React.FC = () => {
   return (
     <div className="space-y-5 animate-fade-in pb-20">
       {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
             <Wrench className="w-5 h-5 text-amber-600" />
-            <span>Módulo de Taller, Refacciones y Tickets</span>
+            <span>Tickets y Taller</span>
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Control de costos, refacciones, mano de obra, facturas y órdenes de servicio por camión.
+            Revisa y gestiona las órdenes de servicio de tu flotilla.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          {/* Create Manual Ticket Button */}
-          <button
-            onClick={() => setIsNewTicketModalOpen(true)}
-            className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-xs flex items-center gap-1.5 cursor-pointer transition-all active:scale-95"
-          >
-            <Plus className="w-4 h-4" />
-            <span>+ Nueva Orden de Taller</span>
-          </button>
-
-          {/* View Switcher */}
-          <div className="flex items-center gap-1 p-1 bg-white border border-slate-200 rounded-xl shadow-xs shrink-0">
-            <button
-              onClick={() => setViewMode('TABLE')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                viewMode === 'TABLE'
-                  ? 'bg-slate-900 text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-              title="Vista en Tabla"
-            >
-              <TableIcon className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Tabla</span>
-            </button>
-            <button
-              onClick={() => setViewMode('KANBAN')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                viewMode === 'KANBAN'
-                  ? 'bg-slate-900 text-white shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-              title="Tablero Kanban de Taller"
-            >
-              <Columns className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Tablero</span>
-            </button>
-          </div>
-        </div>
+        <button
+          onClick={() => setIsNewTicketModalOpen(true)}
+          className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-xs flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 sm:w-auto"
+        >
+          <Plus className="w-4 h-4" />
+          <span>Nueva Orden de Taller</span>
+        </button>
       </div>
 
-      {/* KPI Metric Strip */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-white border border-slate-200 rounded-xl p-3.5 shadow-xs flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center shrink-0">
-            <Clock className="w-4 h-4" />
-          </div>
-          <div>
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">Pendientes</span>
-            <span className="text-base font-black text-slate-900 font-mono">{pendingCount}</span>
-          </div>
-        </div>
-
-        <div className="bg-white border border-slate-200 rounded-xl p-3.5 shadow-xs flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 flex items-center justify-center shrink-0">
-            <Wrench className="w-4 h-4" />
-          </div>
-          <div>
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">En Taller</span>
-            <span className="text-base font-black text-blue-700 font-mono">{inProgressCount}</span>
-          </div>
-        </div>
-
-        <div className="bg-white border border-slate-200 rounded-xl p-3.5 shadow-xs flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 flex items-center justify-center shrink-0">
-            <ShieldAlert className="w-4 h-4" />
-          </div>
-          <div>
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">Críticas Bloqueantes</span>
-            <span className="text-base font-black text-rose-700 font-mono">{criticalCount} unidades</span>
-          </div>
-        </div>
-
-        <div className="bg-white border border-slate-200 rounded-xl p-3.5 shadow-xs flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
-            <DollarSign className="w-4 h-4" />
-          </div>
-          <div>
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">Gasto Total Flota</span>
-            <span className="text-sm font-black text-emerald-700 font-mono">${totalFlotaCost.toLocaleString()} MXN</span>
-          </div>
-        </div>
+      {/* Status quick tabs */}
+      <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <button
+          onClick={() => setStatusFilter('ALL')}
+          className={`px-3.5 py-2 rounded-xl text-xs font-bold border shrink-0 cursor-pointer transition-colors ${statusFilter === 'ALL' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
+        >
+          Todos · {tickets.length}
+        </button>
+        <button
+          onClick={() => setStatusFilter('pendiente')}
+          className={`px-3.5 py-2 rounded-xl text-xs font-bold border shrink-0 cursor-pointer transition-colors ${statusFilter === 'pendiente' ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
+        >
+          Pendientes · {pendingCount}
+        </button>
+        <button
+          onClick={() => setStatusFilter('en_progreso')}
+          className={`px-3.5 py-2 rounded-xl text-xs font-bold border shrink-0 cursor-pointer transition-colors ${statusFilter === 'en_progreso' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
+        >
+          En Taller · {inProgressCount}
+        </button>
+        <button
+          onClick={() => setStatusFilter('resuelto')}
+          className={`px-3.5 py-2 rounded-xl text-xs font-bold border shrink-0 cursor-pointer transition-colors ${statusFilter === 'resuelto' ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
+        >
+          Resueltos · {resolvedCount}
+        </button>
       </div>
 
-      {/* Filter Toolbar */}
-      <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-xs">
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-2.5">
-          <div className="relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-            <input
-              type="text"
-              placeholder="Buscar folio, camión (#507), refacción..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 focus:border-slate-400 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-900 placeholder-slate-400 outline-none transition-colors"
-            />
-          </div>
-
-          <select
-            value={severityFilter}
-            onChange={(e) => setSeverityFilter(e.target.value)}
-            className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-slate-400 cursor-pointer font-medium"
-          >
-            <option value="ALL">Todas las Severidades</option>
-            <option value="critica">Crítica (Bloqueo de Unidad)</option>
-            <option value="media">Media (Reparación Taller)</option>
-            <option value="baja">Baja (Preventiva / Menor)</option>
-          </select>
-
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-slate-400 cursor-pointer font-medium"
-          >
-            <option value="ALL">Todos los Estados</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="en_progreso">En Progreso</option>
-            <option value="resuelto">Resuelto</option>
-            <option value="cancelado">Cancelado</option>
-          </select>
-
-          <select
-            value={vehicleFilter}
-            onChange={(e) => setVehicleFilter(e.target.value)}
-            className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:border-slate-400 cursor-pointer font-medium"
-          >
-            <option value="ALL">Todos los Camiones</option>
-            {vehicles.map((v) => (
-              <option key={v.id} value={v.id}>
-                Camión #{v.economicNumber} - {v.codeName}
-              </option>
-            ))}
-          </select>
+      {/* Search + severity */}
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <div className="relative flex-1">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+          <input
+            type="text"
+            placeholder="Buscar folio, camión, refacción o mecánico..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-white border border-slate-200 focus:border-slate-400 rounded-xl pl-9 pr-3 py-2 text-sm text-slate-900 placeholder-slate-400 outline-none transition-colors shadow-xs"
+          />
         </div>
+        <select
+          value={severityFilter}
+          onChange={(e) => setSeverityFilter(e.target.value)}
+          className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-slate-400 cursor-pointer font-medium shadow-xs sm:w-56"
+        >
+          <option value="ALL">Todas las severidades</option>
+          <option value="critica">Crítica</option>
+          <option value="media">Media</option>
+          <option value="baja">Baja</option>
+        </select>
       </div>
 
       {/* VIEW 1: DATA TABLE */}
       {viewMode === 'TABLE' && (
         <div className="space-y-3">
           {/* DESKTOP TABLE VIEW */}
-          <div className="hidden md:block bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
+          <div className="hidden bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
             <table className="w-full text-left text-xs text-slate-600">
               <thead className="bg-slate-50 border-b border-slate-200 text-[11px] uppercase tracking-wider text-slate-500 font-bold">
                 <tr>
@@ -653,11 +579,11 @@ export const TicketsList: React.FC = () => {
             </div>
           </div>
 
-          {/* MOBILE RESPONSIVE CARDS VIEW (Visible on mobile & tablets < md) */}
-          <div className="block md:hidden space-y-3">
+          {/* Unified ticket list (responsive cards) */}
+          <div className="space-y-3">
             {filteredTickets.length === 0 ? (
-              <div className="p-8 text-center text-slate-400 bg-white border border-slate-200 rounded-xl text-xs">
-                No se encontraron tickets con los filtros seleccionados
+              <div className="p-10 text-center text-slate-400 bg-white border border-dashed border-slate-200 rounded-xl text-sm">
+                No hay órdenes con los filtros seleccionados.
               </div>
             ) : (
               filteredTickets.map((ticket) => {
@@ -668,70 +594,71 @@ export const TicketsList: React.FC = () => {
                 return (
                   <div
                     key={ticket.id}
-                    className="bg-white border border-slate-200 rounded-2xl p-4 shadow-xs space-y-3"
+                    onClick={() => handleOpenTicketDetails(ticket)}
+                    className={`bg-white border border-slate-200 border-l-4 rounded-2xl p-4 shadow-xs cursor-pointer transition-all hover:shadow-md ${
+                      ticket.severity === 'critica'
+                        ? 'border-l-rose-500'
+                        : ticket.severity === 'media'
+                        ? 'border-l-amber-400'
+                        : 'border-l-emerald-400'
+                    }`}
                   >
-                    {/* Header */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono font-bold text-amber-700 text-xs px-2 py-0.5 bg-amber-50 rounded-md border border-amber-200">
-                          {ticket.id}
-                        </span>
-                        <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-md border ${sevInfo.color}`}>
-                          {sevInfo.label}
-                        </span>
-                      </div>
-                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border capitalize ${statusInfo.color}`}>
-                        <span className="w-1.5 h-1.5 rounded-full bg-current" />
-                        <span>{statusInfo.label}</span>
-                      </span>
-                    </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                      {/* Left: folio + info */}
+                      <div className="flex items-start gap-3 min-w-0 flex-1">
+                        <div className="flex flex-col items-start gap-1.5 shrink-0">
+                          <span className="font-mono font-black text-amber-700 text-xs px-2 py-1 bg-amber-50 rounded-md border border-amber-200">
+                            {ticket.id}
+                          </span>
+                          <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-md border ${sevInfo.color}`}>
+                            {sevInfo.label}
+                          </span>
+                        </div>
 
-                    {/* Unit & Title */}
-                    <div>
-                      <div className="flex items-center gap-1.5 font-mono font-bold text-slate-900 text-xs">
-                        <Truck className="w-4 h-4 text-slate-500" />
-                        <span>{ticket.economicNumber ? `Camión #${ticket.economicNumber}` : ticket.unitName}</span>
-                        {ticket.routeCode && (
-                          <span className="text-blue-700 font-bold ml-1">• Ruta {ticket.routeCode}</span>
-                        )}
-                      </div>
-                      <h3 className="font-bold text-slate-900 text-xs mt-1 leading-snug">
-                        {ticket.title}
-                      </h3>
-                      <p className="text-[10px] text-slate-400 mt-0.5">{ticket.category}</p>
-                    </div>
-
-                    {/* Cost Box with Big Button for Mobile */}
-                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between gap-2">
-                      <div>
-                        <span className="text-[10px] uppercase font-bold text-slate-500 block">Costo Registrado</span>
-                        <span className="font-mono font-black text-sm text-slate-900 block">
-                          ${(ticket.totalCost || 0).toLocaleString()} MXN
-                        </span>
-                        <span className="text-[9px] text-slate-400">
-                          {partsCount > 0 ? `${partsCount} refacción(es)` : 'Mano de obra'}
-                        </span>
+                        <div className="min-w-0">
+                          <h3 className="font-bold text-slate-900 text-sm leading-snug line-clamp-1">{ticket.title}</h3>
+                          <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs text-slate-500 mt-1">
+                            <Truck className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                            <span className="font-medium">{ticket.economicNumber ? `Camión #${ticket.economicNumber}` : ticket.unitName}</span>
+                            {ticket.routeCode && <span className="text-blue-700 font-bold">• Ruta {ticket.routeCode}</span>}
+                            <span className="text-slate-300">•</span>
+                            <span>{ticket.category}</span>
+                          </div>
+                        </div>
                       </div>
 
-                      <button
-                        type="button"
-                        onClick={() => handleOpenQuickCostModal(ticket)}
-                        className="px-3 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl text-xs font-bold shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all shrink-0"
-                      >
-                        <Edit2 className="w-3.5 h-3.5" />
-                        <span>Modificar Costo</span>
-                      </button>
-                    </div>
+                      {/* Right: status + cost + actions */}
+                      <div className="flex items-center gap-3 sm:shrink-0">
+                        <div className="text-right">
+                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold border capitalize ${statusInfo.color}`}>
+                            <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                            <span>{statusInfo.label}</span>
+                          </span>
+                          <div className="mt-1">
+                            <span className="font-mono font-black text-sm text-slate-900 block">${(ticket.totalCost || 0).toLocaleString()} MXN</span>
+                            <span className="text-[10px] text-slate-400">{partsCount > 0 ? `${partsCount} refacc.` : 'Mano de obra'}</span>
+                          </div>
+                        </div>
 
-                    {/* Actions */}
-                    <div className="flex items-center gap-2 pt-1">
-                      <button
-                        type="button"
-                        onClick={() => handleOpenTicketDetails(ticket)}
-                        className="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold cursor-pointer text-center shadow-xs"
-                      >
-                        Gestionar Orden Completa
-                      </button>
+                        <div className="flex flex-col gap-1.5">
+                          <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); handleOpenQuickCostModal(ticket); }}
+                            className="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-lg text-xs font-bold shadow-xs flex items-center gap-1 cursor-pointer active:scale-95 transition-all"
+                          >
+                            <Edit2 className="w-3.5 h-3.5" />
+                            <span>Costo</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); handleOpenTicketDetails(ticket); }}
+                            className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold cursor-pointer flex items-center gap-1"
+                          >
+                            <ChevronRight className="w-3.5 h-3.5" />
+                            <span>Revisar</span>
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 );
